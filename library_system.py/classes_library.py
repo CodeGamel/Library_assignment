@@ -1,4 +1,6 @@
 import re
+from datetime import datetime
+from funkyfunctions import calculate_age
 class Book_Operations():
 
     def __init__(self, book_id, title, author, genre, publication_date, availability):
@@ -130,3 +132,21 @@ class User_Operations:
         print(f"Name: {self._name}")
         print(f"Username: {self.username}")
         print(f"Address:  {self.__address}")
+
+class Author_Operations():
+    def __init__(self, authors='', DOB='', bio='', age=None):
+        self.authors = authors
+        self.DOB = DOB
+        self.bio = bio
+        self.age = age
+    
+    def author_info(self):
+        self.authors = input("What is the authors name?")
+        self.DOB = input('What is the authors date and birth?')
+        self.age = calculate_age(self.DOB)
+        if self.age is not None:
+            print(f"The author is {self.age} years old")
+        
+        else:
+            print("Please enter the date in the format YYYY-MM-DD.")
+
