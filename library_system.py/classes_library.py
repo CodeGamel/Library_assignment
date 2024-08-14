@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-from funkyfunctions import calculate_age
+
 class Book_Operations():
 
     def __init__(self, book_id, title, author, genre, publication_date, availability):
@@ -15,7 +15,7 @@ class Book_Operations():
     def __str__(self):
         return f"ID: {self.book_id}, Title: '{self.title}', Author: {self.author}, Available: {self.availability}"
     
-class Library(Book_Operations):
+class BookManager:
 
     def __init__(self):
         self.library = []
@@ -87,7 +87,7 @@ class Library(Book_Operations):
             print(f'Genre:  {self.genre}')
             print(f'Publication Date: {self.publication_date} ')
 
-class User_Operations:
+class UserOperations:
 
     def __init__(self, username, password, email, name, address, userID): 
         self.username = username
@@ -116,6 +116,7 @@ class User_Operations:
         self._name = input("Enter your name: ")
         self.__address = input("Enter your address: ")
         print(f"Congrats '{self.username}' you have created your account at the email '{self.__email}'. Welcome to the library.")
+        self.user = []
         
     def view_user_details(self):
         user = input("You must enter your password to view your details")
@@ -128,25 +129,63 @@ class User_Operations:
             return    
     
     def display_users(self):
-        print(f"Email: {self.__email}")
-        print(f"Name: {self._name}")
-        print(f"Username: {self.username}")
-        print(f"Address:  {self.__address}")
+        for users in self.user:
+            print(f"Email: {self.__email}")
+            print(f"Name: {self._name}")
+            print(f"Username: {self.username}")
+            print(f"Address:  {self.__address}")
 
-class Author_Operations():
-    def __init__(self, authors='', DOB='', bio='', age=None):
-        self.authors = authors
-        self.DOB = DOB
-        self.bio = bio
-        self.age = age
+class AuthorOperations():
+    def __init__(self):
+        self.authors = {}
+        self.next_id = 1
+    
+    def add_author(self, name, birthdate=None, biography=None, genre=None):
+        author_id = self.next_id
+        self.authors[author_id] = {
+            'Name': name,
+            'Birthdate': birthdate,
+            'Biography': biography,
+            'Genre': genre
+        }
+        self.next_id += 1
+        print(f"Author added")
     
     def author_info(self):
-        self.authors = input("What is the authors name?")
-        self.DOB = input('What is the authors date and birth?')
-        self.age = calculate_age(self.DOB)
-        if self.age is not None:
-            print(f"The author is {self.age} years old")
-        
+        name = input("What is the author's name? ")
+        birthdate = input("What is the author's date of birth (YYYY-MM-DD)? ")
+        age = self.calculate_age(birthdate)
+        if age is not None:
+            print(f"The author is {age} years old")
         else:
             print("Please enter the date in the format YYYY-MM-DD.")
+        
+        books = input("Please enter any books from this Author: ")
+        genre = input("Please enter the Genre of this Author: ")
+        bio = input("Write something about the Author: ")
+        
+        self.add_author(name, birthdate, bio, genre, books)
+    
+    def view_author(self, author_id):
+        author = self.authors.get(author_id)
+        if author:
+            print(f"ID: {author_id}")
+            print(f"Name: {author['Name']}")
+            print(f"Birthdate: {author['Birthdate']}")
+            print(f"Biography: {author['Biography']}")
+            print(f"Genre: {author['Genre']}")
+            print("-" * 20)   
+
+    def display_all_authors(self):
+        if not self.authors:
+            print("No authors to display.")
+        else:
+            for author_id, author in self.authors.items():
+                print(f"ID: {author_id}")
+                print(f"Name: {author['Name']}")
+                print(f"Birthdate: {author['Birthdate']}")
+                print(f"Biography: {author['Biography']}")
+                print(f"Genre: {author['Genre']}")
+                print(f"Books: {author['Books']}")
+                print("-" * 20)        
 
